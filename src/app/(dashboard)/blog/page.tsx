@@ -4,7 +4,6 @@ import { prisma } from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { BlogActions } from "@/components/blog/blog-actions";
-import type { BlogPost as BlogPostRecord } from "@prisma/client";
 
 export default async function BlogPage() {
   const session = await auth();
@@ -40,7 +39,7 @@ export default async function BlogPage() {
         </Card>
       ) : (
         <div className="space-y-3">
-          {posts.map((p: BlogPostRecord) => (
+          {posts.map((p) => (
             <Card key={p.id}>
               <CardContent className="p-4 sm:p-5">
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
