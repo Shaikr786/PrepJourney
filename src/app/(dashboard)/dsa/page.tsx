@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ProblemStatus } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent } from "@/components/ui/card";
@@ -26,12 +27,14 @@ export default async function DsaPage({
   if (!session?.user?.id) return null;
 
   const params = await searchParams;
-  const statusFilter = params.status;
+  const statusFilter = Object.values(ProblemStatus).find(
+    (status) => status === params.status
+  );
 
   const problems = await prisma.dsaProblem.findMany({
     where: {
       userId: session.user.id,
-      ...(statusFilter ? { status: statusFilter as any } : {}),
+      ...(statusFilter ? { status: statusFilter } : {}),
     },
     orderBy: { updatedAt: "desc" },
   });
@@ -68,7 +71,7 @@ export default async function DsaPage({
         >
           All
         </Link>
-        {["TODO", "ATTEMPTED", "SOLVED", "REVISIT"].map((s) => (
+        {[ProblemStatus.TODO, ProblemStatus.ATTEMPTED, ProblemStatus.SOLVED, ProblemStatus.REVISIT].map((s) => (
           <Link
             key={s}
             href={`/dsa?status=${s}`}
