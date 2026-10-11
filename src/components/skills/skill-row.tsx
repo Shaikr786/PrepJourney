@@ -51,7 +51,9 @@ export function SkillRow({
             disabled={isPending}
             onClick={() => {
               if (confirm(`Remove skill “${name}”?`)) {
-                startTransition(() => deleteSkill(id));
+                startTransition(async () => {
+                  await deleteSkill(id);
+                });
               }
             }}
           >
@@ -68,7 +70,11 @@ export function SkillRow({
               type="button"
               disabled={isPending}
               title={`Set level ${n}`}
-              onClick={() => startTransition(() => setSkillLevel(id, n))}
+              onClick={() => {
+                startTransition(async () => {
+                  await setSkillLevel(id, n);
+                });
+              }}
               className={`h-2.5 flex-1 rounded-full transition ${
                 n <= level
                   ? "bg-emerald-500"
