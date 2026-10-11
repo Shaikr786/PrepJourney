@@ -62,7 +62,14 @@ export async function listRecordings(): Promise<
     const req = tx.objectStore(STORE).getAll();
     req.onsuccess = () => {
       const all = (req.result as PracticeRecording[])
-        .map(({ blob: _b, ...meta }) => meta)
+        .map(({ id, title, mode, createdAt, durationSec, mimeType }) => ({
+          id,
+          title,
+          mode,
+          createdAt,
+          durationSec,
+          mimeType,
+        }))
         .sort((a, b) => b.createdAt - a.createdAt);
       resolve(all);
     };
